@@ -1,4 +1,6 @@
 # rk-utils
+![Build Status](https://travis-ci.org/kitmi/rk-utils.svg?branch=master) ![Coverage Status](https://coveralls.io/repos/github/kitmi/rk-utils/badge.svg?branch=master) 
+
 Common utilities
 
 ## Features
