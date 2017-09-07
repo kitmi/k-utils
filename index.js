@@ -12,7 +12,7 @@ const path = require('path');
 class BreakContractError extends Error {
     /**
      * Unexpected behavior against the design purpose, only thrown in {@link module:Utilities.contract}
-     * @constructs module:Utilities:BreakContractError
+     * @constructs module:Utilities.BreakContractError
      * @extends Error
      * @param {string} principle - Design principle description
      */
@@ -152,6 +152,7 @@ let U = module.exports = {
      * To place a design-by-contract predication, skipped checking in production environment
      * @param {module:Utilities.purePredicateFunction} predicate
      * @param {text} principle
+     * @throws {module:Utilities.BreakContractError}
      */
     contract: function (predicate, principle) {
         if (process.env.NODE_ENV && process.env.NODE_ENV === 'production') return;

@@ -1,5 +1,5 @@
 {
-  "name": "k-utils",
+  "name": "rk-utils",
   "version": "1.0.0",
   "description": "Common utilities",
   "main": "index.js",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kitmi/k-utils.git"
+    "url": "git+https://github.com/kitmi/rk-utils.git"
   },
   "keywords": [
     "util"
@@ -19,9 +19,9 @@
   "author": "Rockie Guo",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kitmi/k-utils/issues"
+    "url": "https://github.com/kitmi/rk-utils/issues"
   },
-  "homepage": "https://github.com/kitmi/k-utils#readme",
+  "homepage": "https://github.com/kitmi/rk-utils#readme",
   "dependencies": {
     "async": "^2.5.0",
     "co": "^4.6.0",

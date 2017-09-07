@@ -4,7 +4,7 @@
 	},
 	"plugins"   : ["plugins/markdown"],
 	"templates" : {
-		"systemName"            : "k-utils",
+		"systemName"            : "rk-utils",
 		"footer"                : "",
 		"copyright"             : "Copyright (c) 2013 KIT Mobile Internet Pty Ltd",
 		"includeDate"           : false,
