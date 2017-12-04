@@ -44,10 +44,11 @@ describe('bvt', function () {
 
     describe('shell commands', function () {
         it('run a command asynchronously', function (done) {
-            Util.runCmd('pwd', (error, { stdout, stderr } ) => {
-                assert.ok(!error);
+            Util.runCmd_('pwd').then(({ stdout, stderr }) => {
                 stdout.should.endWith('k-utils\n');
                 done();
+            }).catch(error => {
+                done(error);
             });
         });
 
@@ -70,7 +71,7 @@ describe('bvt', function () {
             let bob1 = require(dataFile);
             let bob2Stored;
 
-            Util.load(dataFile).then(bob2 => {
+            Util.load_(dataFile).then(bob2 => {
                 bob1.should.not.equal(bob2);
                 bob2.name.should.equal(bob1.name);
                 bob2.value++;
@@ -78,7 +79,7 @@ describe('bvt', function () {
 
                 bob2Stored = bob2;
 
-                return Util.load(dataFile);
+                return Util.load_(dataFile);
             }).then(bob3 => {
                 bob2Stored.should.not.equal(bob3);
                 done();
@@ -94,10 +95,10 @@ describe('bvt', function () {
                 return yield Promise.resolve(200);
             };
 
-            Util.coWrap(g, (err, result) => {
+            Util.coWrap_(g)().then(result => {
                 result.should.be.exactly(200);
                 done();
-            });
+            }).catch(error => done(error));
         });
     });
 
@@ -111,7 +112,7 @@ describe('bvt', function () {
     describe('promise array', function () {
         it('run an array of promised function', function (done) {
             let a = [ () => Promise.resolve(1), () => Promise.resolve(2), () => Promise.resolve(3) ];
-            Util.eachPromise(a).then(result => {
+            Util.eachPromise_(a).then(result => {
                 result.length.should.be.exactly(3);
                 result[0].should.be.exactly(1);
                 result[1].should.be.exactly(2);

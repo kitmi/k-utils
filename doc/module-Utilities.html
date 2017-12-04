@@ -37,13 +37,6 @@
 				</ul>
 			</li>
 			
-			<li class="dropdown">
-				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
-				<ul class="dropdown-menu ">
-					<li><a href="module-Utilities.BreakContractError.html">Utilities.BreakContractError</a></li>
-				</ul>
-			</li>
-			
 		</ul>
         
             <div class="col-sm-3 col-md-3">
@@ -138,13 +131,6 @@
 
     
 
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="module-Utilities.BreakContractError.html">BreakContractError</a></dt>
-            <dd></dd>
-        </dl>
     
 
     
@@ -386,7 +372,7 @@
             
 <hr>
 <dt class="name" id=".fs">
-    <h4 id=".fs"><span class="type-signature">&lt;static> </span>fs<span class="type-signature"> :FileSystem</span></h4>
+    <h4 id=".fs"><span class="type-signature">&lt;static> </span>fs<span class="type-signature"> :fs</span></h4>
 
     
 </dt>
@@ -402,7 +388,7 @@
         <ul>
             <li>
                 
-<span class="param-type">FileSystem</span>
+<span class="param-type">fs</span>
 
 
 
@@ -479,6 +465,82 @@
             <li>
                 
 <span class="param-type">glob</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		index.js
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id=".Promise">
+    <h4 id=".Promise"><span class="type-signature">&lt;static> </span>Promise<span class="type-signature"> :Promise</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Bluebird is a fully featured promise library with focus on innovative features and performance</p>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Promise</span>
 
 
 
@@ -773,7 +835,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id=".contract"><span class="type-signature">&lt;static> </span>contract(predicate, principle)</h4>
+    <h4 class="name" id=".coWrap_"><span class="type-signature">&lt;static> </span>coWrap_(generator)</h4>
     
     
 </dt>
@@ -781,7 +843,7 @@
 
     
     <div class="description">
-        <p>To place a design-by-contract predication, skipped checking in production environment</p>
+        <p>Returns a function that can use yield to yield promises</p>
     </div>
     
 
@@ -816,219 +878,16 @@
 
         <tr>
             
-                <td class="name"><code>predicate</code></td>
+                <td class="name"><code>generator</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="module-Utilities.html#.purePredicateFunction">module:Utilities.purePredicateFunction</a></span>
+<span class="param-type">Generator</span>
 
 
 
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>principle</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">text</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		index.js
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Throws:</h5>
-    
-            
-
-    <div class="param-desc">
-    
-        
-<span class="param-type"><a href="module-Utilities.BreakContractError.html">module:Utilities.BreakContractError</a></span>
-
-
-
-    
-    </div>
-
-
-        
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id=".coWrap"><span class="type-signature">&lt;static> </span>coWrap(gen, cb, args)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Wrap a generator to be a callback-style async function</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>gen</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>cb</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>args</code></td>
-            
-
-            <td class="type">
             
             </td>
 
@@ -1112,16 +971,7 @@
     </dt>
     <dd>
         
-<span class="param-type">*</span>
-|
-
-<span class="param-type">Promise</span>
-|
-
 <span class="param-type">function</span>
-|
-
-<span class="param-type">any</span>
 
 
 
@@ -1138,7 +988,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id=".eachPromise"><span class="type-signature">&lt;static> </span>eachPromise(arrayOfPromiseFactory)</h4>
+    <h4 class="name" id=".eachPromise_"><span class="type-signature">&lt;static> </span>eachPromise_(arrayOfPromiseFactory)</h4>
     
     
 </dt>
@@ -1268,7 +1118,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Promise</span>
+<span class="param-type">Promise.&lt;Array></span>
 
 
 
@@ -1827,7 +1677,7 @@ Util.eachPromise(_.map(array, a =&gt; (lastResult) =&gt; new Promsie(...))).then
             
 <hr>
 <dt>
-    <h4 class="name" id=".load"><span class="type-signature">&lt;static> </span>load(file, variables, deps)</h4>
+    <h4 class="name" id=".load_"><span class="type-signature">&lt;static> </span>load_(file [, variables] [, deps])</h4>
     
     
 </dt>
@@ -1858,6 +1708,8 @@ Util.eachPromise(_.map(array, a =&gt; (lastResult) =&gt; new Promsie(...))).then
         <th>Type</th>
 
         
+        <th>Argument</th>
+        
 
         
 
@@ -1884,6 +1736,14 @@ Util.eachPromise(_.map(array, a =&gt; (lastResult) =&gt; new Promsie(...))).then
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -1907,6 +1767,16 @@ Util.eachPromise(_.map(array, a =&gt; (lastResult) =&gt; new Promsie(...))).then
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -1932,10 +1802,20 @@ Util.eachPromise(_.map(array, a =&gt; (lastResult) =&gt; new Promsie(...))).then
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>= Dependencies</p></td>
+            <td class="description last"><p>Dependencies</p></td>
         </tr>
 
     
@@ -2011,7 +1891,7 @@ Util.eachPromise(_.map(array, a =&gt; (lastResult) =&gt; new Promsie(...))).then
     </dt>
     <dd>
         
-<span class="param-type">Promise</span>
+<span class="param-type">AsyncFunction.&lt;*></span>
 
 
 
@@ -2036,7 +1916,7 @@ Util.eachPromise(_.map(array, a =&gt; (lastResult) =&gt; new Promsie(...))).then
 
     
     <div class="description">
-        <p>Push a non-array value into an array element of a collection</p>
+        <p>Push an value into an array element of a collection</p>
     </div>
     
 
@@ -2406,7 +2286,7 @@ Util.eachPromise(_.map(array, a =&gt; (lastResult) =&gt; new Promsie(...))).then
             
 <hr>
 <dt>
-    <h4 class="name" id=".runCmd"><span class="type-signature">&lt;static> </span>runCmd(cmd, cb)</h4>
+    <h4 class="name" id=".runCmd_"><span class="type-signature">&lt;static> </span>runCmd_(cmd)</h4>
     
     
 </dt>
@@ -2467,24 +2347,6 @@ Util.eachPromise(_.map(array, a =&gt; (lastResult) =&gt; new Promsie(...))).then
             
 
             <td class="description last"><p>Command line to execute</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>cb</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Callback</p></td>
         </tr>
 
     
@@ -2560,13 +2422,7 @@ Util.eachPromise(_.map(array, a =&gt; (lastResult) =&gt; new Promsie(...))).then
     </dt>
     <dd>
         
-<span class="param-type">*</span>
-|
-
-<span class="param-type">Array</span>
-|
-
-<span class="param-type">Object</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
 
@@ -2719,13 +2575,7 @@ Util.eachPromise(_.map(array, a =&gt; (lastResult) =&gt; new Promsie(...))).then
     </dt>
     <dd>
         
-<span class="param-type">*</span>
-|
-
-<span class="param-type">Array</span>
-|
-
-<span class="param-type">Object</span>
+<span class="param-type">string</span>
 
 
 
@@ -3758,7 +3608,7 @@ Util.eachPromise(_.map(array, a =&gt; (lastResult) =&gt; new Promsie(...))).then
 	</span>
 
 <span class="jsdoc-message">
-	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.4</a>
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

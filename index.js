@@ -1,38 +1,18 @@
 "use strict";
 
-require('debug')('tracing')(__filename);
-
 // Built-in libs
 const URL = require('url');
 const QS = require('querystring');
 const _ = require('lodash');
 const childProcess = require('child_process');
 const path = require('path');
-
-class BreakContractError extends Error {
-    /**
-     * Unexpected behavior against the design purpose, only thrown in {@link module:Utilities.contract}
-     * @constructs module:Utilities.BreakContractError
-     * @extends Error
-     * @param {string} principle - Design principle description
-     */
-    constructor(principle) {
-        super(principle ? principle : 'Design contract Violation.');
-
-        /**
-         * Name of the error class
-         * @member {string}
-         */
-        this.name = 'BreakContractError';
-    }
-}
+const Promise = require('bluebird');
 
 /**
  * A pure closure to be called to check the status under certain conditions
  * @callback module:Utilities.purePredicateFunction
  * @returns {boolean}
  */
-
 
 /**
  * @module Utilities
@@ -60,7 +40,7 @@ let U = module.exports = {
     /**
      * Methods that aren't included in the native fs module and adds promise support to the fs methods. It should be a drop in replacement for fs.
      * See {@link https://www.npmjs.com/package/fs-extra}
-     * @member {FileSystem}
+     * @member {fs}
      */
     get fs() { return require('fs-extra'); },
 
@@ -86,39 +66,47 @@ let U = module.exports = {
     get async() { return require('async'); },
 
     /**
-     * Execute a shell command
-     * @param {string} cmd - Command line to execute
-     * @param cb - Callback
-     * @returns {*|Array|{index: number, input: string}}
+     * Bluebird is a fully featured promise library with focus on innovative features and performance
+     * @member {Promise}
      */
-    runCmd(cmd, cb) {
-        const exec = childProcess.exec;
+    Promise: Promise,
 
-        return exec(cmd, function (error, stdout, stderr) {
-            let output = { stdout, stderr };
+    /**
+     * Execute a shell command
+     * @param {string} cmd - Command line to execute     
+     * @returns {Promise.<Object>}
+     */
+    runCmd_(cmd) {
+        return new Promise((resolve, reject) => {
+            childProcess.exec(cmd, (error, stdout, stderr) => {
+                if (error) {
+                    return reject(error);
+                }
 
-            cb(error, output);
+                let result = { stdout, stderr };
+
+                return resolve(result);
+            });
         });
     },
 
     /**
      * Execute a shell command synchronously
      * @param {string} cmd - Command line to execute
-     * @returns {*|Array|{index: number, input: string}}
+     * @returns {string}
      */
     runCmdSync(cmd) {
-        const exec = childProcess.execSync;
-        return exec(cmd).toString();
+        return childProcess.execSync(cmd).toString();
     },
 
     /**
      * Load a js file in sand box.
      * @param {string} file - Source file
-     * @param {object} variables - Variables as global
-     * @param {object} deps = Dependencies
-     * @returns {Promise}
+     * @param {object} [variables] - Variables as global
+     * @param {object} [deps] - Dependencies
+     * @returns {AsyncFunction.<*>}
      */
-    load(file, variables, deps) {
+    async load_(file, variables, deps) {
         let System = require('systemjs');
         let loader = new System.constructor();
 
@@ -127,52 +115,33 @@ let U = module.exports = {
         }
 
         if (deps) {
-            for (let k in deps) {
+            _.forOwn(deps, k => {
                 loader.set(k, deps[k]);
-            }
+            });
         }
 
-        return loader.import(file);
+        return await loader.import(file);
     },
 
     /**
-     * Wrap a generator to be a callback-style async function
-     * @param gen
-     * @param cb
-     * @param args
-     * @returns {*|Promise|Function|any}
+     * Returns a function that can use yield to yield promises
+     * @param {Generator} generator
+     * @returns {Function}
      */
-    coWrap: function (gen, cb, ...args) {
-        return U.co.wrap(gen)(...args).then(result => cb(null, result)).catch(reason => cb(reason || new Error()));
+    coWrap_(generator) {
+        return Promise.coroutine(generator);
     },
 
-    //debug related-----------
-
-    /**
-     * To place a design-by-contract predication, skipped checking in production environment
-     * @param {module:Utilities.purePredicateFunction} predicate
-     * @param {text} principle
-     * @throws {module:Utilities.BreakContractError}
-     */
-    contract: function (predicate, principle) {
-        if (process.env.NODE_ENV && process.env.NODE_ENV === 'production') return;
-
-        if (!predicate()) {
-            throw new BreakContractError(principle);
-        }
-    },
-
-    //async related-----------
-
+    //async related------
     /**
      * Run an array of promise factory sequentially.
      * @param arrayOfPromiseFactory
-     * @returns {Promise}
+     * @returns {Promise.<Array>}
      * @example
      * let array = [ ... ];
      * Util.eachPromise(_.map(array, a => (lastResult) => new Promsie(...))).then(lastResult => { ... });
      */
-    eachPromise: function (arrayOfPromiseFactory) {
+    eachPromise_: function (arrayOfPromiseFactory) {
         var accumulator = [];
         var ready = Promise.resolve(null);
 
@@ -338,15 +307,13 @@ let U = module.exports = {
     },
 
     /**
-     * Push a non-array value into an array element of a collection
+     * Push an value into an array element of a collection
      * @param {object} collection
      * @param {string} key
      * @param {object} value
      * @returns {*}
      */
     putIntoBucket: function (collection, key, value) {
-        U.contract(() => !_.isArray(value));
-
         let bucket = U.getValueByPath(collection, key);
 
         if (_.isArray(bucket)) {
