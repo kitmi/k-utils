@@ -9,9 +9,16 @@ const path = require('path');
 const Promise = require('bluebird');
 
 /**
- * A pure closure to be called to check the status under certain conditions
- * @callback module:Utilities.purePredicateFunction
+ * A pure closure to be called to check the value status under certain conditions
+ * @callback module:Utilities.predicateFunction
+ * @param {*} value
  * @returns {boolean}
+ */
+
+/**
+ * Promise function
+ * @callback module:Utilities.promiseFunction
+ * @returns {Promise}
  */
 
 /**
@@ -135,13 +142,13 @@ let U = module.exports = {
     //async related------
     /**
      * Run an array of promise factory sequentially.
-     * @param arrayOfPromiseFactory
+     * @param {Array.<module:Utilities.promiseFunction>} arrayOfPromiseFactory
      * @returns {Promise.<Array>}
      * @example
      * let array = [ ... ];
-     * Util.eachPromise(_.map(array, a => (lastResult) => new Promsie(...))).then(lastResult => { ... });
+     * Util.eachPromise_(_.map(array, a => (lastResult) => new Promsie(...))).then(lastResult => { ... });
      */
-    eachPromise_: function (arrayOfPromiseFactory) {
+    eachPromise_(arrayOfPromiseFactory) {
         var accumulator = [];
         var ready = Promise.resolve(null);
 
@@ -152,6 +159,26 @@ let U = module.exports = {
         });
 
         return ready.then(() => accumulator);
+    },
+
+    /**
+     * Run an array of promise factory sequentially and return immediately if any result of them meets the predication
+     * @param {Array.<module:Utilities.promiseFunction>} arrayOfPromiseFactory
+     * @param {module:Utilities.predicateFunction} [predicate]
+     * @returns {Promise.<Array>}
+     * @example
+     * let array = [ ... ];
+     * Util.ifAnyPromise_(_.map(array, a => () => new Promsie(...)), result => result === 'somevalue').then(found => { ... });
+     */
+    async ifAnyPromise_(arrayOfPromiseFactory, predicate) {
+        let l = arrayOfPromiseFactory.length;
+
+        for (let i = 0; i < l; i++) {
+            let result = await arrayOfPromiseFactory[i]();
+            if (predicate(result)) return Promise.resolve([i, result]);
+        }
+
+        return undefined;
     },
 
     //url related-----------

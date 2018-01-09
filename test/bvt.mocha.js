@@ -102,13 +102,6 @@ describe('bvt', function () {
         });
     });
 
-    describe('contract', function () {
-        it('break a contract', function () {
-            let shouldBeTrue = false;
-            assert.throws(() => { Util.contract(() => shouldBeTrue, 'should be true') });
-        });
-    });
-
     describe('promise array', function () {
         it('run an array of promised function', function (done) {
             let a = [ () => Promise.resolve(1), () => Promise.resolve(2), () => Promise.resolve(3) ];
@@ -117,6 +110,15 @@ describe('bvt', function () {
                 result[0].should.be.exactly(1);
                 result[1].should.be.exactly(2);
                 result[2].should.be.exactly(3);
+                done();
+            }).catch(err => done(err));
+        });
+
+        it('see if any promised function return true', function (done) {
+            let a = [ () => Promise.resolve(false), () => Promise.resolve(false), () => Promise.resolve(true), () => Promise.resolve(false)];
+            Util.ifAnyPromise_(a, s => s).then(result => {
+                result[0].should.be.exactly(2);
+                result[1].should.be.ok();
                 done();
             }).catch(err => done(err));
         });
