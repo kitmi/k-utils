@@ -124,6 +124,55 @@ describe('bvt', function () {
         });
     });
 
+    describe('async each', function () {
+        it('iterate an array', function (done) {
+            let a = [1, 2, 3];
+            
+            Util.eachAsync_(a, async (v, i) => {
+                return await new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve(v+i);
+                    }, 0)
+                });
+            }).then(result => {
+
+                result.length.should.be.exactly(3);
+                result[0].should.be.exactly(1);
+                result[1].should.be.exactly(3);
+                result[2].should.be.exactly(5);
+
+                done();
+            }).catch(err => {
+                done(err);
+            });
+        });
+
+        it('iterate an object', function (done) {
+            let a = {
+                a: 1,
+                b: 2,
+                c: 3
+            };
+
+            Util.eachAsync_(a, async (v, k) => {
+                return await new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve(v * 2);
+                    }, 0)
+                });
+            }).then(result => {
+
+                result.should.have.property('a', 2);
+                result.should.have.property('b', 4);
+                result.should.have.property('c', 6);
+
+                done();
+            }).catch(err => {
+                done(err);
+            });
+        });
+    });
+
     describe('url and path related', function () {
         it('append query', function () {
             let appended = Util.urlAppendQuery('http://www.xxx.yyy', { key1: 'value1', key2: 'value2' });

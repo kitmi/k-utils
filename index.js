@@ -16,6 +16,15 @@ const Promise = require('bluebird');
  */
 
 /**
+ * Async iterator
+ * @callback module:Utilities.iteratorFunction
+ * @param {*} value
+ * @param {*} key
+ * @param {*} object
+ * @returns {Promise}
+ */
+
+/**
  * Promise function
  * @callback module:Utilities.promiseFunction
  * @returns {Promise}
@@ -159,6 +168,37 @@ let U = module.exports = {
         });
 
         return ready.then(() => accumulator);
+    },
+
+    /**
+     * Iterate an array of an object asynchronously
+     * @param {Array|Object} obj
+     * @param {module:Utilities.iteratorFunction} iterator
+     * @returns {Promise.<Array|Object>}
+     */
+    async eachAsync_(obj, iterator) {
+        if (_.isArray(obj)) {
+            let r = [];
+
+            let l = obj.length;
+            for (let i = 0; i < l; i++) {
+                r.push(await iterator(obj[i], i, obj));
+            }
+
+            return r;
+        } else if (_.isPlainObject(obj)) {
+            let r = {};
+
+            for (let k in obj) {
+                if (obj.hasOwnProperty(k)) {
+                    r[k] = await iterator(obj[k], k, obj);
+                }
+            }
+
+            return r;
+        } else {
+            return Promise.reject('Invalid argument!');
+        }
     },
 
     /**
