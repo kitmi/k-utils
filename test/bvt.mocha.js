@@ -27,7 +27,7 @@ describe('bvt', function () {
         });
 
         it('glob integrated', function () {
-            let g = require('glob');
+            let g = require('glob-promise');
             Util.glob.should.be.exactly(g);
         });
 

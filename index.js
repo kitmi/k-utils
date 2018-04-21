@@ -65,7 +65,7 @@ let U = module.exports = {
      * See {@link https://www.npmjs.com/package/glob}
      * @member {glob}
      */
-    get glob() { return require('glob'); },
+    get glob() { return require('glob-promise'); },
 
     /**
      * Generator based control flow goodness for nodejs and the browser, using promises, letting you write non-blocking code in a nice-ish way.
@@ -215,7 +215,7 @@ let U = module.exports = {
 
         for (let i = 0; i < l; i++) {
             let result = await arrayOfPromiseFactory[i]();
-            if (predicate(result)) return Promise.resolve([i, result]);
+            if ((predicate && predicate(result)) || result) return Promise.resolve([i, result]);
         }
 
         return undefined;

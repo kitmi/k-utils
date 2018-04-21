@@ -1,6 +1,6 @@
 {
   "name": "rk-utils",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "Common utilities",
   "main": "index.js",
   "scripts": {
@@ -22,14 +22,25 @@
     "url": "https://github.com/kitmi/rk-utils/issues"
   },
   "homepage": "https://github.com/kitmi/rk-utils#readme",
+  "peerDependencies": {
+    "async": "*",
+    "bluebird": "*",
+    "co": "*",
+    "fs-extra": "*",
+    "glob-promise": "*",
+    "glob": "*",
+    "lodash": "*",
+    "string": "*"
+  },
   "dependencies": {
-    "async": "^2.5.0",
-    "bluebird": "^3.5.1",
-    "co": "^4.6.0",
-    "fs-extra": "^4.0.1",
-    "glob": "^7.1.2",
-    "lodash": "^4.17.4",
-    "string": "^3.3.3",
+    "async": "*",
+    "bluebird": "*",
+    "co": "*",
+    "fs-extra": "*",
+    "glob-promise": "*",
+    "glob": "*",
+    "lodash": "*",
+    "string": "*",
     "systemjs": "^0.20.18"
   },
   "devDependencies": {
