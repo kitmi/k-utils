@@ -8,6 +8,14 @@ const childProcess = require('child_process');
 const path = require('path');
 const Promise = require('bluebird');
 
+const templateSettings = {
+    escape: false,
+    evaluate: false,
+    imports: false,
+    interpolate: /{{([\s\S]+?)}}/g,
+    variable: false
+};
+
 /**
  * A pure closure to be called to check the value status under certain conditions
  * @callback module:Utilities.predicateFunction
@@ -45,13 +53,6 @@ let U = module.exports = {
      * @member {lodash}
      */
     _: _,
-
-    /**
-     * Contains methods that aren't included in the vanilla JavaScript string such as escaping html, decoding html entities, stripping tags, etc.
-     * See {@link http://stringjs.com}
-     * @member {String}
-     */
-    get S() { return require('string'); },
 
     /**
      * Methods that aren't included in the native fs module and adds promise support to the fs methods. It should be a drop in replacement for fs.
@@ -264,7 +265,16 @@ let U = module.exports = {
             return base;
         }
 
-        return base + U.ensureLeftSlash(parts.join('/'));
+        return base + U.ensureLeftSlash(parts.map(p => _.trim(p, '/')).join('/'));
+    },
+
+    /**
+     * Interpolate values 
+     * @param {string} str
+     * @param {object} values
+     */
+    template: function (str, values) {
+        return _.template(str, templateSettings)(values);
     },
 
     /**
@@ -273,7 +283,7 @@ let U = module.exports = {
      * @returns {string}
      */
     trimLeftSlash: function (path) {
-        return U.S(path).chompLeft('/').s;
+        return path && _.trimStart(path, '/');
     },
 
     /**
@@ -282,7 +292,7 @@ let U = module.exports = {
      * @returns {string}
      */
     trimRightSlash: function (path) {
-        return U.S(path).chompRight('/').s;
+        return path && _.trimEnd(path, '/');
     },
 
     /**
@@ -291,7 +301,7 @@ let U = module.exports = {
      * @returns {string}
      */
     ensureLeftSlash: function (path) {
-        return U.S(path).ensureLeft('/').s;
+        return (path && path[0] === '/') ? path : '/' + path;
     },
 
     /**
@@ -300,7 +310,18 @@ let U = module.exports = {
      * @returns {string}
      */
     ensureRightSlash: function (path) {
-        return U.S(path).ensureRight('/').s;
+        return (path && path[path.length-1] === '/') ? path : path + '/';
+    },
+
+    /**
+     * Replace all matched search in str by the replacement
+     * @param {string} str
+     * @param {string} search
+     * @param {string} replacement
+     * @returns {string}
+     */
+    replaceAll: function (str, search, replacement) {
+        return str.split(search).join(replacement);
     },
 
     /**
@@ -310,7 +331,7 @@ let U = module.exports = {
      * @returns {string}
      */
     quote: function (str, quoteChar = '"') {
-        return quoteChar + str.replace(quoteChar, "\\" + quoteChar) + quoteChar;
+        return quoteChar + U.replaceAll(str, quoteChar, "\\" + quoteChar) + quoteChar;
     },
 
     /**

@@ -1,6 +1,6 @@
 {
   "name": "rk-utils",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Common utilities",
   "main": "index.js",
   "scripts": {
@@ -29,8 +29,7 @@
     "fs-extra": "*",
     "glob-promise": "*",
     "glob": "*",
-    "lodash": "*",
-    "string": "*"
+    "lodash": "*"   
   },
   "dependencies": {
     "async": "*",
@@ -39,8 +38,7 @@
     "fs-extra": "*",
     "glob-promise": "*",
     "glob": "*",
-    "lodash": "*",
-    "string": "*",
+    "lodash": "*",    
     "systemjs": "^0.20.18"
   },
   "devDependencies": {

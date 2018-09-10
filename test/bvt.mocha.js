@@ -16,11 +16,6 @@ describe('bvt', function () {
             Util._.should.be.exactly(_);
         });
 
-        it('stringjs integrated', function () {
-            let s = require('string');
-            Util.S.should.be.exactly(s);
-        });
-
         it('fs-extra integrated', function () {
             let fs = require('fs-extra');
             Util.fs.should.be.exactly(fs);
@@ -197,9 +192,28 @@ describe('bvt', function () {
     });
 
     describe('string related', function () {
+        it('replace all occurrences in a string', function () {
+            let replaced = Util.replaceAll('string with .. .. in it', '..', '**');
+            replaced.should.equal('string with ** ** in it');
+        });
+        it('template interpolate', function () {
+            let interpolated = Util.template('Hello {{ name }}', { name: 'World!' });
+            interpolated.should.equal('Hello World!');
+        });
+        it('template exceptional', function () {
+            let interpolated = Util.template('Hello <%- value %>', { value: '<b>' });
+            interpolated.should.equal('Hello <%- value %>');
+
+            interpolated = Util.template('Hello <% 1+2 %>', { value: '<b>' });
+            interpolated.should.equal('Hello <% 1+2 %>');
+        });
         it('quote a string', function () {
             let quoted = Util.quote('string with a " in it', '"');
             quoted.should.equal('"string with a \\" in it"');
+        });
+        it('quote a string with multiple quotes', function () {
+            let quoted = Util.quote('string with multiple " ... " ... " in it', '"');
+            quoted.should.equal('"string with multiple \\" ... \\" ... \\" in it"');
         });
         it('bin2Hex', function () {
             let bin = Buffer.from('tést', 'utf8');
