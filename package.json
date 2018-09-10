@@ -29,7 +29,7 @@
     "fs-extra": "*",
     "glob-promise": "*",
     "glob": "*",
-    "lodash": "*"   
+    "lodash": "*"
   },
   "dependencies": {
     "async": "*",
@@ -38,7 +38,7 @@
     "fs-extra": "*",
     "glob-promise": "*",
     "glob": "*",
-    "lodash": "*",    
+    "lodash": "*",
     "systemjs": "^0.20.18"
   },
   "devDependencies": {
