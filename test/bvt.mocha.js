@@ -207,6 +207,19 @@ describe('bvt', function () {
             interpolated = Util.template('Hello <% 1+2 %>', { value: '<b>' });
             interpolated.should.equal('Hello <% 1+2 %>');
         });
+        it('pascal case', function () {
+            let converted = Util.pascalCase('Foo Bar');
+            converted.should.equal('FooBar');
+
+            converted = Util.pascalCase('--foo-bar--');
+            converted.should.equal('FooBar');
+
+            converted = Util.pascalCase('__FOO_BAR__');
+            converted.should.equal('FooBar');
+
+            converted = Util.pascalCase('fooBar');
+            converted.should.equal('FooBar');
+        });
         it('quote a string', function () {
             let quoted = Util.quote('string with a " in it', '"');
             quoted.should.equal('"string with a \\" in it"');

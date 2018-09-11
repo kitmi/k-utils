@@ -325,6 +325,15 @@ let U = module.exports = {
     },
 
     /**
+     * Converts string to pascal case.
+     * @param {string} str
+     * @returns {string}
+     */
+    pascalCase: function (str) {
+        return _.upperFirst(_.camelCase(str));
+    },
+
+    /**
      * Quote a string.
      * @param {string} str
      * @param {string} quoteChar
