@@ -25,12 +25,7 @@ describe('bvt', function () {
             let g = require('glob-promise');
             Util.glob.should.be.exactly(g);
         });
-
-        it('co integrated', function () {
-            let co = require('co');
-            Util.co.should.be.exactly(co);
-        });
-
+        
         it('async integrated', function () {
             let a = require('async');
             Util.async.should.be.exactly(a);
@@ -50,6 +45,21 @@ describe('bvt', function () {
         it('run a command synchronously', function () {
             let result = Util.runCmdSync('pwd');
             result.should.endWith('k-utils\n');
+        });
+
+        it('run a command lively', function (done) {
+            let stdout = '', stderr = '';
+
+            Util.runCmdLive_('echo', [ 'hello' ], o => {
+                stdout += o.toString();
+            }, e => {
+                stderr += e.toString();
+            }).then(code => {
+                stdout.should.be.equal('hello\n');
+                stderr.should.be.empty();
+                code.should.be.equal(0);
+                done();
+            }).catch(err => done(err));
         });
     });
 
@@ -81,19 +91,6 @@ describe('bvt', function () {
             }).catch(err => {
                 done(err);
             });
-        });
-    });
-
-    describe('co-style generator executor', function () {
-        it('run a generator', function (done) {
-            let g = function* () {
-                return yield Promise.resolve(200);
-            };
-
-            Util.coWrap_(g)().then(result => {
-                result.should.be.exactly(200);
-                done();
-            }).catch(error => done(error));
         });
     });
 

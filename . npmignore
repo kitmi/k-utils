@@ -1,0 +1,8 @@
+# .npmignore 
+
+test
+doc
+coverage
+.gitignore
+.travis.yml
+jsdoc.json

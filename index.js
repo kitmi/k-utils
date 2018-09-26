@@ -5,7 +5,6 @@ const URL = require('url');
 const QS = require('querystring');
 const _ = require('lodash');
 const childProcess = require('child_process');
-const path = require('path');
 const Promise = require('bluebird');
 
 const templateSettings = {
@@ -69,13 +68,6 @@ let U = module.exports = {
     get glob() { return require('glob-promise'); },
 
     /**
-     * Generator based control flow goodness for nodejs and the browser, using promises, letting you write non-blocking code in a nice-ish way.
-     * See {@link https://www.npmjs.com/package/co}
-     * @member {co}
-     */
-    get co() { return require('co'); },
-
-    /**
      * Higher-order functions and common patterns for asynchronous code.
      * See {@link http://caolan.github.io/async}
      * @member {async}
@@ -104,6 +96,30 @@ let U = module.exports = {
 
                 return resolve(result);
             });
+        });
+    },
+
+    /**
+     * Execute a shell command and lively output 
+     * @param {string} cmd - Command line to execute 
+     * @param {Array} [args] - Arguments list
+     * @returns {Promise.<Object>}
+     */
+    runCmdLive_(cmd, args, onStdOut, onStdErr) {
+        return new Promise((resolve, reject) => {
+            let ps = childProcess.spawn(cmd, args, { windowsHide: true });
+            let e;
+            
+            if (onStdOut) {
+                ps.stdout.on('data', onStdOut);      
+            }
+
+            if (onStdErr) {
+                ps.stderr.on('data', onStdErr);
+            }
+            
+            ps.on('close', (code) => e ? reject(e) : resolve(code));
+            ps.on('error', (error) => { e = error; });              
         });
     },
 
