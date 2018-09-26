@@ -386,8 +386,6 @@ let U = module.exports = {
             return defaultValue;
         }
 
-        if (nodes.length === 0) return null;
-
         U._.find(nodes, function(e) {
             value = value[e];
             return typeof value === 'undefined';

@@ -25,7 +25,7 @@ describe('bvt', function () {
             let g = require('glob-promise');
             Util.glob.should.be.exactly(g);
         });
-        
+
         it('async integrated', function () {
             let a = require('async');
             Util.async.should.be.exactly(a);
@@ -40,6 +40,10 @@ describe('bvt', function () {
             }).catch(error => {
                 done(error);
             });
+        });
+
+        it('run a error command asynchronously', function () {
+            return Util.runCmd_('fdfsfasfds').should.be.rejected();
         });
 
         it('run a command synchronously', function () {
@@ -60,6 +64,10 @@ describe('bvt', function () {
                 code.should.be.equal(0);
                 done();
             }).catch(err => done(err));
+        });
+
+        it('run a error command', function () {
+            return Util.runCmdLive_('fkdsfjsl', [ ]).should.be.rejected();
         });
     });
 
@@ -94,6 +102,19 @@ describe('bvt', function () {
         });
     });
 
+    describe('co-style generator executor', function () {
+        it('run a generator', function (done) {
+            let g = function* () {
+                return yield Promise.resolve(200);
+            };
+
+            Util.coWrap_(g)().then(result => {
+                result.should.be.exactly(200);
+                done();
+            }).catch(error => done(error));
+        });
+    });
+
     describe('promise array', function () {
         it('run an array of promised function', function (done) {
             let a = [ () => Promise.resolve(1), () => Promise.resolve(2), () => Promise.resolve(3) ];
@@ -114,9 +135,21 @@ describe('bvt', function () {
                 done();
             }).catch(err => done(err));
         });
+
+        it('all promised function return false', function (done) {
+            let a = [ () => Promise.resolve(false), () => Promise.resolve(false), () => Promise.resolve(false), () => Promise.resolve(false)];
+            Util.ifAnyPromise_(a, s => s).then(result => {
+                should.not.exists(result);
+                done();
+            }).catch(err => done(err));
+        });
     });
 
     describe('async each', function () {
+        it('invalid arg', function () {
+            return Util.eachAsync_(0, async () => 0).should.be.rejected();
+        });
+
         it('iterate an array', function (done) {
             let a = [1, 2, 3];
             
@@ -166,14 +199,41 @@ describe('bvt', function () {
     });
 
     describe('url and path related', function () {
-        it('append query', function () {
+        it('append query #0', function () {
+            let appended = Util.urlAppendQuery('http://www.xxx.yyy');
+            appended.should.equal('http://www.xxx.yyy');
+        });
+
+        it('append query #1', function () {
             let appended = Util.urlAppendQuery('http://www.xxx.yyy', { key1: 'value1', key2: 'value2' });
             appended.should.equal('http://www.xxx.yyy?key1=value1&key2=value2');
         });
-        it('url join', function () {
+
+        it('append query #2', function () {
+            let appended = Util.urlAppendQuery('http://www.xxx.yyy', 'key1=value1&key2=value2');
+            appended.should.equal('http://www.xxx.yyy?key1=value1&key2=value2');
+        });
+
+        it('append query #3', function () {
+            let appended = Util.urlAppendQuery('http://www.xxx.yyy?key0=', { key1: 'value1', key2: 'value2' });
+            appended.should.equal('http://www.xxx.yyy/?key0=&key1=value1&key2=value2');
+        });
+
+        it('append query #4', function () {
+            let appended = Util.urlAppendQuery('http://www.xxx.yyy?key0=', 'key1=value1&key2=value2');
+            appended.should.equal('http://www.xxx.yyy/?key0=&key1=value1&key2=value2');
+        });
+
+        it('url join #1', function () {
+            let joined = Util.urlJoin('http://www.xxx.yyy');
+            joined.should.equal('http://www.xxx.yyy');
+        });
+
+        it('url join #2', function () {
             let joined = Util.urlJoin('http://www.xxx.yyy/', 'forum', 'posts');
             joined.should.equal('http://www.xxx.yyy/forum/posts');
         });
+
         it('path helpers', function () {
             let a = '/something/';
             Util.trimLeftSlash(a).should.equal('something/');
@@ -232,6 +292,16 @@ describe('bvt', function () {
     });
 
     describe('collection related', function () {
+        it('get a default value #1', function () {
+            let a = Util.getValueByPath(undefined, 'any', 1);
+            a.should.be.exactly(1);
+        });
+
+        it('get a default value #2', function () {
+            let a = Util.getValueByPath({ abc: 'def' }, '', 1);
+            a.should.be.exactly(1);
+        });
+
         it('get a deeply hived value by path', function () {
             let obj = {
                 kol1: {
