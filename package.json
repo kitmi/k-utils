@@ -1,6 +1,6 @@
 {
   "name": "rk-utils",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "description": "Common utilities",
   "main": "index.js",
   "scripts": {

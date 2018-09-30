@@ -258,9 +258,14 @@ describe('bvt', function () {
             joined.should.equal('/user/login');
         });
 
-        it('url join with empty', function () {
+        it('url join with multiple slash', function () {
             let joined = Util.urlJoin('/', '/', '/login', '', 'form');
             joined.should.equal('/login/form');
+        });
+
+        it('url join with empty slash', function () {
+            let joined = Util.urlJoin('/user', '');
+            joined.should.equal('/user');
         });
 
         it('path helpers', function () {

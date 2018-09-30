@@ -287,7 +287,7 @@ let U = module.exports = {
             return U.trimRightSlash(base);
         }
 
-        return U.trimRightSlash(base) + U.ensureLeftSlash(parts.map(p => _.trim(p, '/')).filter(p => p !== '').join('/'));
+        return U.trimRightSlash(base) + U.ensureLeftSlash(parts.map(p => _.trim(p, '/')).filter(p => p !== '').join('/'), true);
     },
 
     /**
@@ -322,8 +322,8 @@ let U = module.exports = {
      * @param {string} path - The path
      * @returns {string}
      */
-    ensureLeftSlash: function (path) {
-        return (path && path[0] === '/') ? path : '/' + path;
+    ensureLeftSlash: function (path, excludeEmpty) {
+        return (path && path[0] === '/') ? path : ((excludeEmpty && path === '') ? '' : '/' + path);
     },
 
     /**
