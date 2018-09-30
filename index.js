@@ -273,15 +273,21 @@ let U = module.exports = {
      * @param {string} base - Left part
      * @param {array} parts - The rest of Url component parts
      * @returns {string}
+     * 
+     * @example
+     *   urlJoin('/', '/user', 'login') => /user/login
+     *   urlJoin('/') => '/'
+     *   urlJoin('') => '/'
+     *   urlJoin('/path/', '/user') => /path/user 
      */
     urlJoin: function (base, ...parts) {
-        base = U.trimRightSlash(base);
-
         if (!parts || parts.length === 0) {
-            return base;
+            if (base === '' || base === '/') return '/';
+
+            return U.trimRightSlash(base);
         }
 
-        return base + U.ensureLeftSlash(parts.map(p => _.trim(p, '/')).join('/'));
+        return U.trimRightSlash(base) + U.ensureLeftSlash(parts.map(p => _.trim(p, '/')).filter(p => p !== '').join('/'));
     },
 
     /**

@@ -100,6 +100,15 @@ describe('bvt', function () {
                 done(err);
             });
         });
+
+        it('sandbox loading with context', function (done) {
+            let dataFile = path.resolve(__dirname, './data/loadWithContext.js');
+            
+            Util.load_(dataFile, { Bob: 100 }).then(bob => {                
+                bob.value.should.be.exactly(100);
+                done();                
+            }).catch(err => done(err));
+        });
     });
 
     describe('co-style generator executor', function () {
@@ -232,6 +241,26 @@ describe('bvt', function () {
         it('url join #2', function () {
             let joined = Util.urlJoin('http://www.xxx.yyy/', 'forum', 'posts');
             joined.should.equal('http://www.xxx.yyy/forum/posts');
+        });
+
+        it('url join root slash', function () {
+            let joined = Util.urlJoin('/');
+            joined.should.equal('/');
+        });
+
+        it('url join empty base', function () {
+            let joined = Util.urlJoin('');
+            joined.should.equal('/');
+        });
+
+        it('url join root slash with left slash in middle', function () {
+            let joined = Util.urlJoin('/', '/user', '/login');
+            joined.should.equal('/user/login');
+        });
+
+        it('url join with empty', function () {
+            let joined = Util.urlJoin('/', '/', '/login', '', 'form');
+            joined.should.equal('/login/form');
         });
 
         it('path helpers', function () {
