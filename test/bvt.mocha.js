@@ -336,6 +336,11 @@ describe('bvt', function () {
             a.should.be.exactly(1);
         });
 
+        it('get a default value by array', function () {
+            let a = Util.getValueByPath({ abc: { def: 'ok' } }, [ 'abc', 'def' ]);
+            a.should.be.exactly('ok');
+        });
+
         it('get a deeply hived value by path', function () {
             let obj = {
                 kol1: {

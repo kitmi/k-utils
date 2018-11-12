@@ -38,8 +38,8 @@ const templateSettings = {
  */
 
 /**
+ * Collection of utilities.
  * @module Utilities
- * @summary Collection of utilities.
  */
 
 let U = module.exports = {
@@ -81,7 +81,7 @@ let U = module.exports = {
     Promise: Promise,
 
     /**
-     * Execute a shell command
+     * Execute a shell command.
      * @param {string} cmd - Command line to execute     
      * @returns {Promise.<Object>}
      */
@@ -385,14 +385,14 @@ let U = module.exports = {
      * @returns {*}
      */
     getValueByPath: function (collection, keyPath, defaultValue) {
-        let nodes = keyPath.split('.'),
+        let nodes = Array.isArray(keyPath) ? keyPath : keyPath.split('.'),
             value = collection;
 
         if (_.isUndefined(value)) {
             return defaultValue;
         }
 
-        U._.find(nodes, function(e) {
+        _.find(nodes, function(e) {
             value = value[e];
             return typeof value === 'undefined';
         });
@@ -408,11 +408,11 @@ let U = module.exports = {
      * @returns {*}
      */
     setValueByPath: function (collection, keyPath, value) {
-        let nodes = keyPath.split('.');
+        let nodes = Array.isArray(keyPath) ? keyPath : keyPath.split('.');
         let lastKey = nodes.pop();
         let lastNode = collection;
 
-        U._.each(nodes, key => {
+        _.each(nodes, key => {
             if (key in lastNode) {
                 lastNode = lastNode[key];
             } else {
