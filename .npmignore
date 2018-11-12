@@ -8,3 +8,4 @@ coverage
 jsdoc.json
 .nyc_output
 src
+babel.config.js
