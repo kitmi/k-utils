@@ -6,16 +6,17 @@
 	"templates" : {
 		"systemName"            : "rk-utils",
 		"footer"                : "",
-		"copyright"             : "Copyright (c) 2013 KIT Mobile Internet Pty Ltd",
+		"copyright"             : "Copyright (c) 2013-2018 KIT Mobile Internet Pty Ltd",
 		"includeDate"           : false,
 		"navType"               : "vertical",
-		"theme"                 : "cerulean",
+		"theme"                 : "cosmo",
 		"linenums"              : true,
 		"collapseSymbols"       : false,
 		"inverseNav"            : true,
 		"outputSourceFiles"     : false,
 		"outputSourcePath"      : true,
-		"cleverLinks"		    : true
+		"cleverLinks"		    : true,
+		"search"                : true
 	},
 	"markdown"  : {
 		"parser"   : "gfm",

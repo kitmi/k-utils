@@ -23,3 +23,7 @@ Thumbs.db
 # test files #
 ######################
 test/temp
+
+# built files #
+######################
+lib

@@ -1,13 +1,17 @@
 {
   "name": "rk-utils",
-  "version": "2.1.7",
+  "version": "2.1.8",
   "description": "Common utilities",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "doc": "jsdoc -c jsdoc.json -t ./node_modules/ink-docstrap/template -R README.md -d './doc' -r --verbose index.js",
-    "test": "mocha -R spec -t 5000 test/*.mocha.js",
-    "cover": "nyc --reporter=html --reporter=text mocha -- test/*.mocha.js",
-    "travis": "nyc --reporter=lcovonly mocha -- test/*.mocha.js && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "doc": "jsdoc -c jsdoc.json -t ./node_modules/ink-docstrap/template -R README.md -d './doc' -r --verbose src",
+    "test": "npm run build:prod && mocha -R spec -t 5000 test/*.mocha.js",
+    "cover": "npm run build && nyc --reporter=html --reporter=text mocha -- test/*.mocha.js",
+    "travis": "npm run build:prod && nyc --reporter=lcovonly mocha -- test/*.mocha.js && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "bulid:clean": "rm -rf lib",
+    "build": "npm run bulid:clean && NODE_ENV=development babel src -d lib",
+    "build:prod": "npm run bulid:clean && NODE_ENV=production babel src -d lib",
+    "prepublishOnly": "npm run build:prod"
   },
   "repository": {
     "type": "git",
@@ -43,6 +47,15 @@
     "jsdoc": "^3.5.5",
     "mocha": "^5.2.0",
     "nyc": "^13.0.1",
-    "should": "^13.2.3"
+    "should": "^13.2.3",
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-proposal-decorators": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/register": "^7.0.0",
+    "babel-plugin-contract": "^1.3.0",
+    "babel-plugin-source-map-support": "^2.0.1",
+    "source-map-support": "^0.5.9"
   }
 }

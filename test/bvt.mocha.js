@@ -7,7 +7,7 @@
 const should = require('should');
 const assert = require('assert');
 const path = require('path');
-const Util = require('../index.js');
+const Util = require('../lib/index.js');
 
 describe('bvt', function () {
     describe('facade', function () {
