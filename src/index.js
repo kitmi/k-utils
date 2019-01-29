@@ -366,6 +366,20 @@ let U = module.exports = {
     },
 
     /**
+     * Check a string if it is quoted with " or '
+     * @param {string} s
+     * @returns {boolean}
+     */
+    isQuoted: s => (s.startsWith("'") || s.startsWith('"')) && s[0] === s[s.length-1],
+
+    /**
+     * Check a string if it is wrapped with given character
+     * @param {string} s
+     * @returns {boolean}
+     */
+    isWrappedWith: (s, q) => (s.startsWith(q) && s[0] === s[s.length-1]),
+
+    /**
      * Bin to hex, like 0x7F
      * @param {binary} bin
      * @returns {string}
@@ -385,15 +399,15 @@ let U = module.exports = {
      * @returns {*}
      */
     getValueByPath: function (collection, keyPath, defaultValue) {
-        let nodes = Array.isArray(keyPath) ? keyPath : keyPath.split('.'),
+        let nodes = Array.isArray(keyPath) ? keyPath.concat() : keyPath.split('.'),
             value = collection;
 
         if (_.isUndefined(value)) {
             return defaultValue;
         }
 
-        _.find(nodes, function(e) {
-            value = value[e];
+        _.find(nodes, elem => {
+            value = value[elem];
             return typeof value === 'undefined';
         });
 
@@ -408,7 +422,7 @@ let U = module.exports = {
      * @returns {*}
      */
     setValueByPath: function (collection, keyPath, value) {
-        let nodes = Array.isArray(keyPath) ? keyPath : keyPath.split('.');
+        let nodes = Array.isArray(keyPath) ? keyPath.concat() : keyPath.split('.');
         let lastKey = nodes.pop();
         let lastNode = collection;
 
