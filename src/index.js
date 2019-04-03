@@ -408,7 +408,7 @@ let U = module.exports = {
 
         _.find(nodes, elem => {
             value = value[elem];
-            return typeof value === 'undefined';
+            return _.isNil(value);
         });
 
         return value || defaultValue;

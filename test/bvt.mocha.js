@@ -347,17 +347,22 @@ describe('bvt', function () {
                     kol2: {
                         k1: 100,
                         k2: 200
-                    }
+                    },
+                    kol4: null
                 }
             };
 
             let v1 = Util.getValueByPath(obj, 'kol1.kol2.k1');
             let v2 = Util.getValueByPath(obj, 'kol1.kol2.k2');
             let v3 = Util.getValueByPath(obj, 'kol1.kol2.k3', 300);
+            let v4 = Util.getValueByPath(obj, 'kol1.kol3.k3');
+            let v5 = Util.getValueByPath(obj, 'kol1.kol4.k3');
 
             v1.should.be.exactly(100);
             v2.should.be.exactly(200);
             v3.should.be.exactly(300);
+            should.not.exist(v4);
+            should.not.exist(v5);
         });
         it('set a deeply hived value by path', function () {
             let obj = {
