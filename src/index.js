@@ -402,7 +402,7 @@ let U = module.exports = {
         let nodes = Array.isArray(keyPath) ? keyPath.concat() : keyPath.split('.'),
             value = collection;
 
-        if (_.isUndefined(value)) {
+        if (_.isNil(value)) {
             return defaultValue;
         }
 
@@ -411,7 +411,7 @@ let U = module.exports = {
             return _.isNil(value);
         });
 
-        return value || defaultValue;
+        return _.isNil(value) ? defaultValue : value;
     },
 
     /**
@@ -422,6 +422,10 @@ let U = module.exports = {
      * @returns {*}
      */
     setValueByPath: function (collection, keyPath, value) {
+        if (_.isNil(collection) || typeof collection !== 'object') {
+            throw new Error('Invalid collection object.');
+        }
+
         let nodes = Array.isArray(keyPath) ? keyPath.concat() : keyPath.split('.');
         let lastKey = nodes.pop();
         let lastNode = collection;

@@ -326,6 +326,11 @@ describe('bvt', function () {
     });
 
     describe('collection related', function () {
+        it('get a value', function () {
+            let a = Util.getValueByPath({ abc: 0 }, 'abc');
+            a.should.be.exactly(0);
+        });
+
         it('get a default value #1', function () {
             let a = Util.getValueByPath(undefined, 'any', 1);
             a.should.be.exactly(1);
@@ -370,6 +375,12 @@ describe('bvt', function () {
 
             Util.setValueByPath(obj, 'kol1.kol2.k1', 100);
             obj['kol1']['kol2']['k1'].should.be.exactly(100);
+        });
+        it('set a null collection', function () {
+            (() => { Util.setValueByPath(null, 'kol1.kol2.k1', 100) }).should.throw();            
+        });
+        it('set a non-object collection', function () {
+            (() => { Util.setValueByPath('non-object', 'kol1.kol2.k1', 100) }).should.throw();            
         });
         it('put into a bucket', function () {
             let obj = {
