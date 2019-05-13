@@ -1,6 +1,6 @@
 {
   "name": "rk-utils",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "Common utilities",
   "main": "lib/index.js",
   "scripts": {
@@ -34,9 +34,9 @@
     "lodash": "^4.17.11"
   },
   "dependencies": {
-    "async": "^2.6.1",
-    "bluebird": "^3.5.2",
-    "fs-extra": "^7.0.0",
+    "async": "^2.6.2",
+    "bluebird": "^3.5.3",
+    "fs-extra": "^7.0.1",
     "glob-promise": "^3.4.0",
     "lodash": "^4.17.11",
     "systemjs": "^0.19.47"

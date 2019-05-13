@@ -6,6 +6,7 @@ const QS = require('querystring');
 const _ = require('lodash');
 const childProcess = require('child_process');
 const Promise = require('bluebird');
+const util = require('util');
 
 const templateSettings = {
     escape: false,
@@ -14,6 +15,8 @@ const templateSettings = {
     interpolate: /{{([\s\S]+?)}}/g,
     variable: false
 };
+
+const setTimeoutPromise = util.promisify(setTimeout);
 
 /**
  * A pure closure to be called to check the value status under certain conditions
@@ -237,6 +240,9 @@ let U = module.exports = {
 
         return undefined;
     },
+
+    until: setTimeoutPromise,
+    sleep: setTimeoutPromise,
 
     //url related-----------
 

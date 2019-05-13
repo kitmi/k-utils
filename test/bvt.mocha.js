@@ -71,6 +71,28 @@ describe('bvt', function () {
         });
     });
 
+    describe('sleep', function () {
+        it('sleep 1000', async function () {
+            let i = 0;
+            
+            return new Promise((resolve, reject) => {
+                setTimeout(function () {
+                    i.should.be.exactly(1);
+                    resolve();
+                }, 2000);
+
+                setTimeout(function () {
+                    i.should.be.exactly(0);
+                }, 500);
+
+                Util.sleep(1000).then(() => {
+                    i = 1;
+                });
+            });
+            
+        });
+    });
+
     describe('loading into sandbox', function () {
         it('usual loading', function () {
             let dataFile = path.resolve(__dirname, './data/load.js');
