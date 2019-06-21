@@ -6,7 +6,6 @@ const QS = require('querystring');
 const _ = require('lodash');
 const childProcess = require('child_process');
 const Promise = require('bluebird');
-const util = require('util');
 
 const templateSettings = {
     escape: false,
@@ -15,8 +14,6 @@ const templateSettings = {
     interpolate: /{{([\s\S]+?)}}/g,
     variable: false
 };
-
-const setTimeoutPromise = util.promisify(setTimeout);
 
 /**
  * A pure closure to be called to check the value status under certain conditions
@@ -45,7 +42,7 @@ const setTimeoutPromise = util.promisify(setTimeout);
  * @module Utilities
  */
 
-let U = module.exports = {
+const U = {
 
     //exports commonly-used utility class
 
@@ -241,8 +238,43 @@ let U = module.exports = {
         return undefined;
     },
 
-    until: setTimeoutPromise,
-    sleep: setTimeoutPromise,
+    sleep_: (ms) => Promise.delay(ms),
+
+    waitUntil_: async function (checker, checkInterval = 1000, maxRounds = 10) {
+        let result = await checker();
+        if (result) return result;
+    
+        let counter = 0;
+        do {
+            await Promise.delay(checkInterval); 
+    
+            result = await checker();
+    
+            if (result) {
+                break;
+            }
+        } while (++counter < maxRounds);
+    
+        return result;
+    },
+
+    hookInvoke: function (obj, onCalling, onCalled) {
+        return new Proxy(obj, {
+            get(target, propKey, receiver) {
+                const origMethod = target[propKey];
+                if (typeof origMethod === 'function') {
+                    return function (...args) {
+                        onCalling && Promise.resolve(onCalling(obj, { name: propKey, args }));
+                        let returned = origMethod.apply(target, args);
+                        onCalled && Promise.resolve(returned).then(returned => Promise.resolve(onCalled(obj, { name: propKey, returned }))).catch();
+                        return returned;
+                    }
+                } 
+    
+                return origMethod;
+            }
+        });
+    },
 
     //url related-----------
 
@@ -448,6 +480,30 @@ let U = module.exports = {
     },
 
     /**
+     * Check whether a key exists by dot-separated path
+     * @param {*} collection 
+     * @param {*} keyPath 
+     */
+    hasKeyByPath: function (collection, keyPath) {
+        if (!collection) {
+            return false;
+        }
+    
+        let nodes = Array.isArray(keyPath) ? keyPath.concat() : keyPath.split('.');
+        let lastKey = nodes.pop();
+        let value = collection;
+    
+        _.find(nodes, key => {
+            value = value[key];
+            return _.isNil(value);
+        });
+    
+        if (_.isNil(value)) return false;
+    
+        return lastKey in value;
+    },
+
+    /**
      * Push an value into an array element of a collection
      * @param {object} collection
      * @param {string} key
@@ -470,3 +526,9 @@ let U = module.exports = {
         return bucket;
     }
 };
+
+//for compatible
+U.sleep = U.sleep_;
+U.until = U.sleep_;
+
+module.exports = U;

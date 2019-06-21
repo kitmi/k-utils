@@ -71,25 +71,40 @@ describe('bvt', function () {
         });
     });
 
-    describe('sleep', function () {
-        it('sleep 1000', async function () {
+    describe('sleep & spin', function () {
+        it('sleep', async function () {
             let i = 0;
             
             return new Promise((resolve, reject) => {
                 setTimeout(function () {
                     i.should.be.exactly(1);
                     resolve();
-                }, 2000);
+                }, 400);
 
                 setTimeout(function () {
                     i.should.be.exactly(0);
-                }, 500);
+                }, 100);
 
-                Util.sleep(1000).then(() => {
+                Util.sleep_(200).then(() => {
                     i = 1;
                 });
             });
             
+        });
+
+        it('wait until', async function () {
+            let i = 0, c = 0;
+
+            setTimeout(function () {
+                i = 1;
+            }, 1000);
+
+            await Util.waitUntil_(() => {
+                c++;
+                return i === 1;
+            }, 50, 30);
+            
+            c.should.be.within(19,21);            
         });
     });
 
@@ -227,6 +242,65 @@ describe('bvt', function () {
                 done(err);
             });
         });
+    });
+
+    describe('hook invoke', function () {
+        let A = class {
+            constructor() {
+                this.c = 10;
+            }
+
+            methodA(a, b) {
+                return a + b + this.c;
+            }
+        };
+
+        let t = '', sum = 0;
+
+        let w = Util.hookInvoke(new A(), (obj, { name, args }) => {
+            t += name;
+            sum += Util._.sum(args) + obj.c;
+        });
+
+        let r = w.methodA(2,5);
+        
+        r.should.be.exactly(17);
+        t.should.be.exactly('methodA');
+        sum.should.be.exactly(17);
+    });
+
+    describe('hook invoke async', async function () {
+        let A = class {
+            constructor() {
+                this.c = 10;
+            }
+
+            async methodA(a, b) {
+                await Util.sleep_(10);
+                return a + b + this.c;
+            }
+        };
+
+        let t = '', sum = 0;
+
+        let w = Util.hookInvoke(new A(), (obj, { name, args }) => {
+            console.log('onCalling');
+            t += name;
+            sum += Util._.sum(args) + obj.c;
+        }, (obj, { name, returned }) => {
+            console.log('onCalled');
+
+            t += ` returned: ${returned}`;
+            sum += obj.c;
+        });
+
+        let r = await w.methodA(2,5);
+
+        await Util.sleep_(1000);
+        
+        r.should.be.exactly(17);
+        t.should.be.exactly('methodA returned: 17');
+        sum.should.be.exactly(27);
     });
 
     describe('url and path related', function () {
@@ -425,6 +499,20 @@ describe('bvt', function () {
             bucket2[1].should.be.exactly(20);
             bucket3[0].should.be.exactly(3);
             bucket3[1].should.be.exactly(30);
+        });
+
+        it('has key by path', function () {
+            let obj = {
+                k1: [ 1 ],
+                k2: {
+                    k22: 2
+                }
+            };
+
+            Util.hasKeyByPath(obj, 'k1').should.be.ok();
+            Util.hasKeyByPath(obj, 'k2').should.be.ok();
+            Util.hasKeyByPath(obj, 'k2.k22').should.be.ok();
+            Util.hasKeyByPath(obj, 'k2.k23').should.not.be.ok();
         });
     });
 });
