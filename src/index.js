@@ -374,6 +374,32 @@ const U = {
     },
 
     /**
+     * Drop the right part if the right part is.
+     * @param {*} str 
+     * @param {*} right 
+     */
+    dropRightIfEndsWith: function (str, right) {
+        if (str.endsWith(right)) {
+            return str.slice(0, -right.length);
+        }  
+    
+        return str;
+    }, 
+
+    /**
+     * Drop the left part if the left part is.
+     * @param {*} str 
+     * @param {*} left 
+     */
+    dropLeftIfStartsWith: function (str, left) {
+        if (str.startsWith(left)) {
+            return str.substr(left.length);
+        }  
+    
+        return str;
+    }, 
+
+    /**
      * Replace all matched search in str by the replacement
      * @param {string} str
      * @param {string} search
