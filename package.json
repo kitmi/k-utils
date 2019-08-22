@@ -4,7 +4,7 @@
   "description": "Common utilities",
   "main": "lib/index.js",
   "scripts": {
-    "doc": "jsdoc -c jsdoc.json -t ./node_modules/ink-docstrap/template -R README.md -d './doc' -r --verbose src",
+    "doc": "jsdoc -c jsdoc.json -t ./node_modules/ink-docstrap/template -R README.md -d './docs' -r --verbose src",
     "test": "npm run build:prod && mocha -R spec test/*.mocha.js",
     "cover": "npm run build && nyc --reporter=html --reporter=text mocha -- test/*.mocha.js",
     "travis": "npm run build:prod && nyc --reporter=lcovonly mocha -- test/*.mocha.js && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
