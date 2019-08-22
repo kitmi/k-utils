@@ -1,7 +1,7 @@
 # .npmignore 
 
 test
-doc
+docs
 coverage
 .gitignore
 .travis.yml
