@@ -10,6 +10,10 @@ Common utilities
 * co-style async wrappers
 * url and string operation shortcuts
 
+## Document
+
+https://kitmi.github.io/rk-utils/index.html
+
 ## License
 
   MIT

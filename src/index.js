@@ -50,6 +50,7 @@ const U = {
      * A utility-belt library for JavaScript that provides support for the usual functional suspects (each, map, reduce, filter...) without extending any core JavaScript objects.
      * See {@link https://lodash.com}
      * @member {lodash}
+     * @alias module:Utilities._
      */
     _: _,
 
@@ -57,6 +58,7 @@ const U = {
      * Methods that aren't included in the native fs module and adds promise support to the fs methods. It should be a drop in replacement for fs.
      * See {@link https://www.npmjs.com/package/fs-extra}
      * @member {fs}
+     * @alias module:Utilities.fs
      */
     get fs() { return require('fs-extra'); },
 
@@ -64,6 +66,7 @@ const U = {
      * Match files using the patterns the shell uses, like stars and stuff.
      * See {@link https://www.npmjs.com/package/glob}
      * @member {glob}
+     * @alias module:Utilities.glob
      */
     get glob() { return require('glob-promise'); },
 
@@ -71,12 +74,14 @@ const U = {
      * Higher-order functions and common patterns for asynchronous code.
      * See {@link http://caolan.github.io/async}
      * @member {async}
+     * @alias module:Utilities.async
      */
     get async() { return require('async'); },
 
     /**
      * Bluebird is a fully featured promise library with focus on innovative features and performance
      * @member {Promise}
+     * @alias module:Utilities.Promise
      */
     Promise: Promise,
 
@@ -84,6 +89,7 @@ const U = {
      * Execute a shell command.
      * @param {string} cmd - Command line to execute     
      * @returns {Promise.<Object>}
+     * @alias module:Utilities.runCmd_
      */
     runCmd_(cmd) {
         return new Promise((resolve, reject) => {
@@ -104,6 +110,7 @@ const U = {
      * @param {string} cmd - Command line to execute 
      * @param {Array} [args] - Arguments list
      * @returns {Promise.<Object>}
+     * @alias module:Utilities.runCmdLive_
      */
     runCmdLive_(cmd, args, onStdOut, onStdErr) {
         return new Promise((resolve, reject) => {
@@ -127,6 +134,7 @@ const U = {
      * Execute a shell command synchronously
      * @param {string} cmd - Command line to execute
      * @returns {string}
+     * @alias module:Utilities.runCmdSync
      */
     runCmdSync(cmd) {
         return childProcess.execSync(cmd).toString();
@@ -138,6 +146,7 @@ const U = {
      * @param {object} [variables] - Variables as global
      * @param {object} [deps] - Dependencies
      * @returns {AsyncFunction.<*>}
+     * @alias module:Utilities.load_
      */
     async load_(file, variables, deps) {
         let System = require('systemjs');
@@ -160,6 +169,7 @@ const U = {
      * Returns a function that can use yield to yield promises
      * @param {Generator} generator
      * @returns {Function}
+     * @alias module:Utilities.coWrap_
      */
     coWrap_(generator) {
         return Promise.coroutine(generator);
@@ -170,6 +180,7 @@ const U = {
      * Run an array of promise factory sequentially.
      * @param {Array.<module:Utilities.promiseFunction>} arrayOfPromiseFactory
      * @returns {Promise.<Array>}
+     * @alias module:Utilities.eachPromise_
      * @example
      * let array = [ ... ];
      * Util.eachPromise_(_.map(array, a => (lastResult) => new Promsie(...))).then(lastResult => { ... });
@@ -192,6 +203,7 @@ const U = {
      * @param {Array|Object} obj
      * @param {module:Utilities.iteratorFunction} iterator
      * @returns {Promise.<Array|Object>}
+     * @alias module:Utilities.eachAsync_
      */
     async eachAsync_(obj, iterator) {
         if (_.isArray(obj)) {
@@ -223,6 +235,7 @@ const U = {
      * @param {Array.<module:Utilities.promiseFunction>} arrayOfPromiseFactory
      * @param {module:Utilities.predicateFunction} [predicate]
      * @returns {Promise.<Array>}
+     * @alias module:Utilities.ifAnyPromise_
      * @example
      * let array = [ ... ];
      * Util.ifAnyPromise_(_.map(array, a => () => new Promsie(...)), result => result === 'somevalue').then(found => { ... });
@@ -238,8 +251,21 @@ const U = {
         return undefined;
     },
 
+    /**
+     * Returns a promise to be resolved after given duration (ms)
+     * @param {integer} ms - milliseconds
+     * @alias module:Utilities.sleep_
+     */
     sleep_: (ms) => Promise.delay(ms),
 
+    /**
+     * Run the checker every given duration for certain rounds until the checker returns non-false value.
+     * @param {Function} checker - predicator
+     * @param {integer} [checkInterval=1000]
+     * @param {integer} [maxRounds=10]
+     * @returns {*}
+     * @alias module:Utilities.waitUntil_
+     */
     waitUntil_: async function (checker, checkInterval = 1000, maxRounds = 10) {
         let result = await checker();
         if (result) return result;
@@ -283,6 +309,7 @@ const U = {
      * @param {string} url - Original url.
      * @param {object} query - Key-value pairs query object to be merged into the url.
      * @returns {string}
+     * @alias module:Utilities.urlAppendQuery
      */
     urlAppendQuery: function (url, query) {
         if (!query) return url;
@@ -311,6 +338,7 @@ const U = {
      * @param {string} base - Left part
      * @param {array} parts - The rest of Url component parts
      * @returns {string}
+     * @alias module:Utilities.urlJoin
      * 
      * @example
      *   urlJoin('/', '/user', 'login') => /user/login
@@ -332,6 +360,8 @@ const U = {
      * Interpolate values 
      * @param {string} str
      * @param {object} values
+     * @returns {string}
+     * @alias module:Utilities.template
      */
     template: function (str, values) {
         return _.template(str, templateSettings)(values);
@@ -341,6 +371,7 @@ const U = {
      * Trim left '/' of a path.
      * @param {string} path - The path
      * @returns {string}
+     * @alias module:Utilities.trimLeftSlash
      */
     trimLeftSlash: function (path) {
         return path && _.trimStart(path, '/');
@@ -350,6 +381,7 @@ const U = {
      * Trim right '/' of a path.
      * @param {string} path - The path
      * @returns {string}
+     * @alias module:Utilities.trimRightSlash
      */
     trimRightSlash: function (path) {
         return path && _.trimEnd(path, '/');
@@ -359,6 +391,7 @@ const U = {
      * Add a '/' to the left of a path if it does not have one.
      * @param {string} path - The path
      * @returns {string}
+     * @alias module:Utilities.ensureLeftSlash
      */
     ensureLeftSlash: function (path, excludeEmpty) {
         return (path && path[0] === '/') ? path : ((excludeEmpty && path === '') ? '' : '/' + path);
@@ -368,6 +401,7 @@ const U = {
      * Add a '/' to the right of a path if it does not have one.
      * @param {string} path - The path
      * @returns {string}
+     * @alias module:Utilities.ensureRightSlash
      */
     ensureRightSlash: function (path) {
         return (path && path[path.length-1] === '/') ? path : path + '/';
@@ -377,6 +411,7 @@ const U = {
      * Drop the right part if the right part is.
      * @param {*} str 
      * @param {*} right 
+     * @alias module:Utilities.dropRightIfEndsWith
      */
     dropRightIfEndsWith: function (str, right) {
         if (str.endsWith(right)) {
@@ -390,6 +425,7 @@ const U = {
      * Drop the left part if the left part is.
      * @param {*} str 
      * @param {*} left 
+     * @alias module:Utilities.dropLeftIfStartsWith
      */
     dropLeftIfStartsWith: function (str, left) {
         if (str.startsWith(left)) {
@@ -405,6 +441,7 @@ const U = {
      * @param {string} search
      * @param {string} replacement
      * @returns {string}
+     * @alias module:Utilities.replaceAll
      */
     replaceAll: function (str, search, replacement) {
         return str.split(search).join(replacement);
@@ -414,6 +451,7 @@ const U = {
      * Converts string to pascal case.
      * @param {string} str
      * @returns {string}
+     * @alias module:Utilities.pascalCase
      */
     pascalCase: function (str) {
         return _.upperFirst(_.camelCase(str));
@@ -424,6 +462,7 @@ const U = {
      * @param {string} str
      * @param {string} quoteChar
      * @returns {string}
+     * @alias module:Utilities.quote
      */
     quote: function (str, quoteChar = '"') {
         return quoteChar + U.replaceAll(str, quoteChar, "\\" + quoteChar) + quoteChar;
@@ -433,6 +472,7 @@ const U = {
      * Check a string if it is quoted with " or '
      * @param {string} s
      * @returns {boolean}
+     * @alias module:Utilities.isQuoted
      */
     isQuoted: s => (s.startsWith("'") || s.startsWith('"')) && s[0] === s[s.length-1],
 
@@ -440,6 +480,7 @@ const U = {
      * Check a string if it is wrapped with given character
      * @param {string} s
      * @returns {boolean}
+     * @alias module:Utilities.isWrappedWith
      */
     isWrappedWith: (s, q) => (s.startsWith(q) && s[0] === s[s.length-1]),
 
@@ -447,6 +488,7 @@ const U = {
      * Bin to hex, like 0x7F
      * @param {binary} bin
      * @returns {string}
+     * @alias module:Utilities.bin2Hex
      */
     bin2Hex: function (bin) {
         bin = bin.toString();
@@ -461,6 +503,7 @@ const U = {
      * @param {string} keyPath - A dot-separated path (dsp), e.g. settings.xxx.yyy
      * @param {object} [defaultValue] - The default value if the path does not exist
      * @returns {*}
+     * @alias module:Utilities.getValueByPath
      */
     getValueByPath: function (collection, keyPath, defaultValue) {
         let nodes = Array.isArray(keyPath) ? keyPath.concat() : keyPath.split('.'),
@@ -484,6 +527,7 @@ const U = {
      * @param {string} keyPath - A dot-separated path (dsp), e.g. settings.xxx.yyy
      * @param {object} value - The default value if the path does not exist
      * @returns {*}
+     * @alias module:Utilities.setValueByPath
      */
     setValueByPath: function (collection, keyPath, value) {
         if (_.isNil(collection) || typeof collection !== 'object') {
@@ -509,6 +553,8 @@ const U = {
      * Check whether a key exists by dot-separated path
      * @param {*} collection 
      * @param {*} keyPath 
+     * @returns {boolean}
+     * @alias module:Utilities.hasKeyByPath
      */
     hasKeyByPath: function (collection, keyPath) {
         if (!collection) {
@@ -536,6 +582,7 @@ const U = {
      * @param {object} value
      * @param {boolean} flattenArray - Whether to flatten the array, if the given value is an array.
      * @returns {*}
+     * @alias module:Utilities.putIntoBucket
      */
     putIntoBucket: function (collection, key, value, flattenArray) {
         let bucket = U.getValueByPath(collection, key);
