@@ -534,18 +534,24 @@ const U = {
      * @param {object} collection
      * @param {string} key
      * @param {object} value
+     * @param {boolean} flattenArray - Whether to flatten the array, if the given value is an array.
      * @returns {*}
      */
-    putIntoBucket: function (collection, key, value) {
+    putIntoBucket: function (collection, key, value, flattenArray) {
         let bucket = U.getValueByPath(collection, key);
 
         if (_.isArray(bucket)) {
-            bucket.push(value);
+            if (_.isArray(value) && flattenArray) {
+                bucket = bucket.concat(value);
+                U.setValueByPath(collection, key, bucket);
+            } else {
+                bucket.push(value);
+            }
         } else if (_.isNil(bucket)) {
-            bucket = [ value ];
+            bucket = (_.isArray(value) && flattenArray) ? value.concat() : [ value ];
             U.setValueByPath(collection, key, bucket);
         } else {
-            bucket = [ bucket, value ];
+            bucket = (_.isArray(value) && flattenArray) ? [ bucket ].concat(value) : [ bucket, value ];
             U.setValueByPath(collection, key, bucket);
         }
 
